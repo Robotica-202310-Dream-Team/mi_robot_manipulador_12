@@ -23,7 +23,7 @@ class serialRaspESP(Node):
         except Exception:
             pass
         super().__init__('SerialRaspESP')
-        print("Este nodo sirve para pasar la información que llega al tópico manipulator_cmdVel a la ESP. \n") 
+        print("Inicio del nodo que sirve para pasar la información que llega al tópico manipulator_cmdVel a la ESP. \n") 
         print("Corriendo en la raspberry. \n")
         self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
         self.mensaje=""

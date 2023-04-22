@@ -17,7 +17,7 @@ class Robot_Manipulator_Teleop(Node):
 
     def __init__(self):
         super().__init__('robot_manipulator_teleop')
-        print("Este nodo sirve para mover el manipulador a partir de las teclas j,k,l.")
+        print("Inicio del nodo que sirve para mover el manipulador a partir de las teclas j,k,l.")
         self.primera = float(input("Ingrese la velocidad de la primera juntura (0-180): "))
         self.segunda = float(input("Ingrese la velocidad de la segunda juntura (0-180): "))
         self.tercera = float(input("Ingrese la velocidad de la tercera juntura (0-180): "))
