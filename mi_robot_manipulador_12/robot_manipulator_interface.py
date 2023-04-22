@@ -59,7 +59,7 @@ class Robot_Manipulator_Interface(Node):
 
         style = ttk.Style()
         style.configure("Horizontal.TScale", background= 'gray22')  
-
+        ventana.mainloop()
 
     # ----------------------------------------------------- CALLBACK (Actualizar gráfica) --------------------------------------------------------------
 
