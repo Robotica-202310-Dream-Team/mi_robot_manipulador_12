@@ -25,21 +25,21 @@ class Joystick_Publisher(Node):
     def timer_callback(self, msg, joystick_ref):
         self.empty_event_queue()
         if self._axis_moved:
-            boton_joint1 = joystick_ref.get_button(4)
-            print (f"Joint1: {boton_joint1}")
-
-            boton_joint2 = joystick_ref.get_button(2)
-            print (f"Joint2: {boton_joint2}")
-
-            boton_joint3 = joystick_ref.get_button(3)
-            print (f"Joint3: {boton_joint3}")
-
-            boton_end_effector = joystick_ref.get_button(0)
-            print (f"End effector: {boton_end_effector}")
-            
             axis3 = joystick_ref.get_axis(3)
             angle = round (axis3*-90 +90)
-            print (f"Angulo : {angle}")
+            boton_joint1 = joystick_ref.get_button(4)
+            #print (f"Joint1: {boton_joint1}")
+            boton_joint2 = joystick_ref.get_button(2)
+            #print (f"Joint2: {boton_joint2}")
+            boton_joint3 = joystick_ref.get_button(3)
+            #print (f"Joint3: {boton_joint3}")
+            self.msg.data[0] = boton_joint1*angle 
+            self.msg.data[1] = boton_joint2*angle
+            self.msg.data[2] = boton_joint3*angle
+            boton_end_effector = joystick_ref.get_button(0)
+            #print (f"End effector: {boton_end_effector}")
+            
+            print (f"Mensaje: {self.msg.data}")
             self._axis_moved = False
         
 
