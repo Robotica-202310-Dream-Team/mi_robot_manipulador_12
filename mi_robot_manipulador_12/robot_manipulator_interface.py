@@ -1,4 +1,3 @@
-
 from random import randint
 from time import sleep
 
@@ -16,6 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from geometry_msgs.msg import Vector3
 from threading import Thread
 import threading
+import tkinter as tk
 
 #Este es el nodo para la interfaz del manipulador
 
@@ -42,20 +42,20 @@ class Robot_Manipulator_Interface(Node):
         ax.set_xlim(-10,10)
         ax.set_ylim(-10,10)
         ax.set_zlim(-10,10)
-
+        self.presionado = False
         global ventana
         ventana = Tk()
         ventana.geometry('750x680')
         ventana.wm_title('Grafica para visualizar la posición del End-Effector')
-        self.presionado = False
-        
+        #ventana.minsize(width=1025,height=1125)
+
         frame = Frame(ventana,  bg='gray22',bd=3)
         frame.grid(column=0,row=0)
 
         global canvas
         canvas = FigureCanvasTkAgg(fig, master = frame)  # Crea el area de dibujo en Tkinter
         canvas.get_tk_widget().grid(column=0, row=0, columnspan=3, padx=5, pady =5)
-        Button(frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
+        tk.Button(frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
 
         style = ttk.Style()
         style.configure("Horizontal.TScale", background= 'gray22')  
@@ -83,8 +83,9 @@ class Robot_Manipulator_Interface(Node):
         ventana.update()
         canvas.draw()  
 
-
-
+    
+        
+           
 
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 
