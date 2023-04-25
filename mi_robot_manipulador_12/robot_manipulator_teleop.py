@@ -30,10 +30,10 @@ class Robot_Manipulator_Teleop(Node):
 
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulador_cmdVel', 10)
         self.msg = Float32MultiArray()
-        self.msg.data = [0.0, 0.0, 0.0]
+        self.msg.data = [0.0, 0.0, 0.0, 0.0]
         listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         listener.start()
-       
+
 
     # -----------------------------------------------------KEYBOARD THREAD--------------------------------------------------------------
 
@@ -42,31 +42,22 @@ class Robot_Manipulator_Teleop(Node):
             print('alphanumeric key {0} pressed'.format(key.char))
             if key.char =='j':
                 self.msg.data[0] = self.primera
-                self.msg.data[1] = 0
-                self.msg.data[2] = 0
             elif key.char == 'k':
-                self.msg.data[0] = 0
                 self.msg.data[1] = self.segunda
-                self.msg.data[2] = 0
             elif key.char == 'l':
-                self.msg.data[0] = 0
-                self.msg.data[1] = 0
                 self.msg.data[2] = self.tercera
+            elif key.char == 'm':
+                self.msg.data[3] = 1    
             self.publisher.publish(self.msg)
         except AttributeError:
             try:
                 print('special key {0} pressed'.format(key))
                 if key.char =='j':
                     self.msg.data[0] = self.primera
-                    self.msg.data[1] = 0
-                    self.msg.data[2] = 0
+
                 elif key.char == 'k':
-                    self.msg.data[0] = 0
                     self.msg.data[1] = self.segunda
-                    self.msg.data[2] = 0
                 elif key.char == 'l':
-                    self.msg.data[0] = 0
-                    self.msg.data[1] = 0
                     self.msg.data[2] = self.tercera
                 self.publisher.publish(self.msg)
             except: 
@@ -78,14 +69,14 @@ class Robot_Manipulator_Teleop(Node):
             print('{0} released'.format(key))
             self.msg.data[0] = 0
             self.msg.data[1] = 0
-            self.msg.data[2] = 0
+            self.msg.data[3] = 0
             self.publisher.publish(self.msg)
             if key == keyboard.Key.esc:
                 return False
         except AttributeError:
             if key == keyboard.Key.esc:
                 return False
-          
+
 
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 

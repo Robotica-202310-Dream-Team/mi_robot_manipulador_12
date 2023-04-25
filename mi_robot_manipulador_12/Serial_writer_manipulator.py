@@ -56,9 +56,15 @@ class Serial_writer(Node):
         primero = int(msg.data[0])
         segundo = int(msg.data[1])
         tercero = int(msg.data[2])
+        end_effector = int(msg.data[3])
         self.sleep = 0.015
         self.goto(self,primero,segundo,tercero)#Moverl los joints 0 1 y 2
-        
+        if end_effector:
+            self.openHand()
+        else:
+            self.closeHand()
+
+
         
 
     def __del__(self):
