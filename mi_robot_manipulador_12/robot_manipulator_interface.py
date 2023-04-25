@@ -46,11 +46,9 @@ class Robot_Manipulator_Interface(Node):
         global ventana
         ventana = Tk()
         ventana.geometry('750x680')
-        #ventana.geometry('1025x1125')
         ventana.wm_title('Grafica para visualizar la posición del End-Effector')
-        #ventana.minsize(width=800,height=800)
-        #ventana.minsize(width=1025,height=1125)
-
+        self.presionado = False
+        
         frame = Frame(ventana,  bg='gray22',bd=3)
         frame.grid(column=0,row=0)
 
@@ -68,12 +66,13 @@ class Robot_Manipulator_Interface(Node):
 
     def inicio(self):
         print ("Boton de inicio presionado")
-        thread = threading.Thread(target=rclpy.spin(self))
-        thread.start()
+        if self.presionado == False:
+            self.presionado = True
+            thread = threading.Thread(target=rclpy.spin(self))
+            thread.start()
 
     def listener_callback(self, msg):
         print("Llego el mensaje: "+ str(msg)+ "\n")
-
         x = msg.x
         y = msg.y
         z = msg.z
@@ -81,11 +80,11 @@ class Robot_Manipulator_Interface(Node):
         print(y)
         print(z)
         ax.scatter3D(x,y,z)
+        ventana.update()
         canvas.draw()  
 
-    
-        
-           
+
+
 
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 
