@@ -42,23 +42,53 @@ class Robot_Manipulator_Teleop(Node):
             print('alphanumeric key {0} pressed'.format(key.char))
             if key.char =='j':
                 self.msg.data[0] = self.primera
+                #self.msg.data[1] = 0
+                #self.msg.data[2] = 0
             elif key.char == 'k':
                 self.msg.data[1] = self.segunda
+                #self.msg.data[0] = 0
+                #self.msg.data[2] = 0
             elif key.char == 'l':
                 self.msg.data[2] = self.tercera
-            elif key.char == 'm':
-                self.msg.data[3] = 1    
-            self.publisher.publish(self.msg)
+                #self.msg.data[1] = 0
+                #self.msg.data[0] = 0
+            elif key.char == 'o':
+                self.msg.data[3] = 1
+                #self.msg.data[0] = 0
+                #self.msg.data[1] = 0
+                #self.msg.data[2] = 0    
+            elif key.char == 'c':
+                self.msg.data[3] = 0
+                #self.msg.data[0] = 0
+                #self.msg.data[1] = 0
+                #self.msg.data[2] = 0  
+            elif key.char == 'r':
+                self.msg.data[3] = 0
+                self.primera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+                self.segunda = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+                self.tercera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): ")) 
+                self.publisher.publish(self.msg)
         except AttributeError:
             try:
                 print('special key {0} pressed'.format(key))
                 if key.char =='j':
                     self.msg.data[0] = self.primera
+                    #self.msg.data[1] = 0
+                    #self.msg.data[2] = 0
+                    #self.msg.data[3] = 0 
 
                 elif key.char == 'k':
                     self.msg.data[1] = self.segunda
-                elif key.char == 'l':
-                    self.msg.data[2] = self.tercera
+                    #self.msg.data[0] = 0
+                    #self.msg.data[2] = 0
+                    #self.msg.data[3] = 0 
+                elif key.char == 'o':
+                    self.msg.data[3] = 1
+                    #self.msg.data[0] = 0
+                    #self.msg.data[1] = 0
+                    #self.msg.data[3] = 0 
+                elif key.char == 'c':
+                    self.msg.data[3] = 0 
                 self.publisher.publish(self.msg)
             except: 
                 pass
@@ -67,9 +97,10 @@ class Robot_Manipulator_Teleop(Node):
     def on_release(self,key):
         try:
             print('{0} released'.format(key))
-            self.msg.data[0] = 0
-            self.msg.data[1] = 0
-            self.msg.data[3] = 0
+            #self.msg.data[0] = 0
+            #self.msg.data[1] = 0
+            #self.msg.data[2] = 0
+            #self.msg.data[3] = 0
             self.publisher.publish(self.msg)
             if key == keyboard.Key.esc:
                 return False
