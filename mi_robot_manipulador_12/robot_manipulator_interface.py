@@ -33,7 +33,7 @@ class Robot_Manipulator_Interface(Node):
         self.subscription = self.create_subscription(Vector3, 'robot_manipulator_position', self.listener_callback, 10)
 
 
-        fig = plt.figure(figsize=(10,10))
+        fig = plt.figure(figsize=(7.3,6))
         global ax
         ax = plt.axes(projection="3d")
         ax.set_xlabel("X")
@@ -45,9 +45,11 @@ class Robot_Manipulator_Interface(Node):
 
         global ventana
         ventana = Tk()
-        ventana.geometry('1025x1125')
+        ventana.geometry('750x680')
+        #ventana.geometry('1025x1125')
         ventana.wm_title('Grafica para visualizar la posición del End-Effector')
-        ventana.minsize(width=1025,height=1125)
+        #ventana.minsize(width=800,height=800)
+        #ventana.minsize(width=1025,height=1125)
 
         frame = Frame(ventana,  bg='gray22',bd=3)
         frame.grid(column=0,row=0)
