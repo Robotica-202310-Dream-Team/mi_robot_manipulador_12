@@ -18,15 +18,15 @@ class Robot_Manipulator_Teleop(Node):
     def __init__(self):
         super().__init__('robot_manipulator_teleop')
         print("Inicio del nodo que sirve para mover el manipulador a partir de las teclas j,k,l.")
-        self.primera = float(input("Ingrese la velocidad de la primera juntura (0-180): "))
-        self.segunda = float(input("Ingrese la velocidad de la segunda juntura (0-180): "))
-        self.tercera = float(input("Ingrese la velocidad de la tercera juntura (0-180): "))
+        self.primera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+        self.segunda = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+        self.tercera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
         while self.primera > 180 or self.primera < 0 or self.segunda > 180 or self.segunda < 0 or self.tercera > 180 or self.tercera < 0:
             print("Los valores ingresados exceden el rango permitido. Ingrese los valores nuevamente. \n")
-            self.primera = float(input("Ingrese la velocidad de la primera juntura (0-180): "))
-            self.segunda = float(input("Ingrese la velocidad de la segunda juntura (0-180): "))
-            self.tercera = float(input("Ingrese la velocidad de la tercera juntura (0-180): "))
-
+            self.primera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+            self.segunda = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+            self.tercera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
+        
 
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulador_cmdVel', 10)
         self.msg = Float32MultiArray()
