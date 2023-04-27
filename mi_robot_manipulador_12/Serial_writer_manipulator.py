@@ -24,17 +24,18 @@ class Serial_writer(Node):
 
 
     def __init__(self):
-        super().__init__('Serial_writer_manipulator')
-        print("Inicio del nodo que escribe los ángulos de los joints por serial a la ESP32\n") 
-        print("Corriendo en la raspberry. \n")
-        self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
-        self.mensaje=""
         try:
             self.ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
             self.ser.reset_input_buffer()   
             print("Conexion Serial exitosa")     
         except Exception:
-            pass        
+            pass   
+        super().__init__('Serial_writer_manipulator')
+        print("Inicio del nodo que escribe los ángulos de los joints por serial a la ESP32\n") 
+        print("Corriendo en la raspberry. \n")
+        self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
+        self.mensaje=""
+             
         self.joint1 = 90
         self.joint2 = 90
         self.joint3 = 90
