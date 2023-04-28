@@ -1,4 +1,3 @@
-
 from random import randint
 from time import sleep
 
@@ -16,6 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from geometry_msgs.msg import Vector3
 from threading import Thread
 import threading
+import tkinter as tk
 
 #Este es el nodo para la interfaz del manipulador
 
@@ -33,7 +33,7 @@ class Robot_Manipulator_Interface(Node):
         self.subscription = self.create_subscription(Vector3, 'robot_manipulator_position', self.listener_callback, 10)
 
 
-        fig = plt.figure(figsize=(10,10))
+        fig = plt.figure(figsize=(7.3,6))
         global ax
         ax = plt.axes(projection="3d")
         ax.set_xlabel("X")
@@ -42,12 +42,12 @@ class Robot_Manipulator_Interface(Node):
         ax.set_xlim(-10,10)
         ax.set_ylim(-10,10)
         ax.set_zlim(-10,10)
-
+        self.presionado = False
         global ventana
         ventana = Tk()
-        ventana.geometry('1025x1125')
+        ventana.geometry('750x680')
         ventana.wm_title('Grafica para visualizar la posición del End-Effector')
-        ventana.minsize(width=1025,height=1125)
+        #ventana.minsize(width=1025,height=1125)
 
         frame = Frame(ventana,  bg='gray22',bd=3)
         frame.grid(column=0,row=0)
@@ -55,7 +55,7 @@ class Robot_Manipulator_Interface(Node):
         global canvas
         canvas = FigureCanvasTkAgg(fig, master = frame)  # Crea el area de dibujo en Tkinter
         canvas.get_tk_widget().grid(column=0, row=0, columnspan=3, padx=5, pady =5)
-        Button(frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
+        tk.Button(frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
 
         style = ttk.Style()
         style.configure("Horizontal.TScale", background= 'gray22')  
@@ -66,12 +66,13 @@ class Robot_Manipulator_Interface(Node):
 
     def inicio(self):
         print ("Boton de inicio presionado")
-        thread = threading.Thread(target=rclpy.spin(self))
-        thread.start()
+        if self.presionado == False:
+            self.presionado = True
+            thread = threading.Thread(target=rclpy.spin(self))
+            thread.start()
 
     def listener_callback(self, msg):
         print("Llego el mensaje: "+ str(msg)+ "\n")
-
         x = msg.x
         y = msg.y
         z = msg.z
@@ -79,6 +80,7 @@ class Robot_Manipulator_Interface(Node):
         print(y)
         print(z)
         ax.scatter3D(x,y,z)
+        ventana.update()
         canvas.draw()  
 
     
