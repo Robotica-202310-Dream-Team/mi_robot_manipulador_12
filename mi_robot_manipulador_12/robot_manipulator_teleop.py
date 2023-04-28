@@ -28,7 +28,7 @@ class Robot_Manipulator_Teleop(Node):
             self.tercera = float(input("Ingrese el ángulo al que desea mover la juntura (0-180): "))
         
 
-        self.publisher = self.create_publisher(Float32MultiArray, 'manipulador_cmdVel', 10)
+        self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         self.msg = Float32MultiArray()
         self.msg.data = [0.0, 0.0, 0.0, 0.0]
         listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)

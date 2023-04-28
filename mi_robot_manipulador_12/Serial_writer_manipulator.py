@@ -6,7 +6,7 @@ import json
 from rclpy.node import Node
 from std_msgs.msg import String, Float32MultiArray
 from geometry_msgs.msg import Twist
-import pyfirmata
+#import pyfirmata
 import time
 
 class Serial_writer(Node):
@@ -167,8 +167,8 @@ def agregar_ceros(numero):
 
 def main(args=None):
     rclpy.init(args=args)
-    Serial_writer=Serial_writer()
-    rclpy.spin(Serial_writer)
+    serial_writer=Serial_writer()
+    rclpy.spin(serial_writer)
     Serial_writer.destroy_node()
     rclpy.shutdown()
 
