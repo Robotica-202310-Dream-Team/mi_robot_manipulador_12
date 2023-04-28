@@ -19,7 +19,7 @@ class Direct_Kinematics(Node):
         self.alpha_DH = np.array([0, 90, 0])
 
         # Articular information
-        self.subscription = self.create_subscription(Float32MultiArray, 'manipulador_cmdVel', self.listener_callback, 10)
+        self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
         self.publisher = self.create_publisher(Float32MultiArray, 'endeffector_position', 10)
         timer_period = 0.5 # Seconds
         self.timer = self.create_timer(timer_period, self.publisher_callback)
@@ -39,6 +39,7 @@ class Direct_Kinematics(Node):
 
     def listener_callback(self, msg): 
         self.articular = msg.data
+        print(self.articular)
         self.T01 = self.homogeneous_matrix(self.a_DH[0], self.d_DH[0], self.alpha_DH[0], self.articular[0])
         self.T12 = self.homogeneous_matrix(self.a_DH[1], self.d_DH[1], self.alpha_DH[1], self.articular[1])
         self.T23 = self.homogeneous_matrix(self.a_DH[2], self.d_DH[2], self.alpha_DH[2], self.articular[2])
@@ -64,7 +65,7 @@ def main(args=None):
     rclpy.init(args=args)
     direct_kinematics = Direct_Kinematics()
     rclpy.spin(direct_kinematics)
-    direct_kinematics.destroy_node()
+    Direct_Kinematics.destroy_node()
     rclpy.shutdown()
 
 

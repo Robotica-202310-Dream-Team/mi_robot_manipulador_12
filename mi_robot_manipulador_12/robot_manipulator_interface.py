@@ -30,7 +30,7 @@ class Robot_Manipulator_Interface(Node):
     def __init__(self):
         super().__init__('robot_manipulator_teleop')
         print("Inicio del nodo que sirve para visualizar el manipulador.")
-        self.subscription = self.create_subscription(Vector3, 'robot_manipulator_position', self.listener_callback, 10)
+        self.subscription = self.create_subscription(Float32MultiArray, 'endeffector_position', self.listener_callback, 10)
 
 
         fig = plt.figure(figsize=(7.3,6))
@@ -73,9 +73,9 @@ class Robot_Manipulator_Interface(Node):
 
     def listener_callback(self, msg):
         print("Llego el mensaje: "+ str(msg)+ "\n")
-        x = msg.x
-        y = msg.y
-        z = msg.z
+        x = msg.data[0]
+        y = msg.data[1]
+        z = msg.data[2]
         print(x)
         print(y)
         print(z)
