@@ -24,6 +24,7 @@ setup(
             'SerialRaspESP = mi_robot_manipulador_12.SerialRaspESP:main',
             'robot_manipulator_planner = mi_robot_manipulador_12.robot_manipulator_planner:main',
             'robot_manipulator_interface = mi_robot_manipulador_12.robot_manipulator_interface:main',
+            'robot_manipulator_directK = mi_robot_manipulador_12.robot_manipulator_directK:main',
             'Serial_writer_manipulator = mi_robot_manipulador_12.Serial_writer_manipulator:main',
             'robot_manipulator_joystick_teleop = mi_robot_manipulador_12.robot_manipulator_joystick_teleop:main',
         ],  
