@@ -149,18 +149,18 @@ class Serial_writer(Node):
         time.sleep(0.2)
     """
     def openHand(self):
-        self.endeffector = agregar_ceros(45) 
+        self.endeffector = agregar_ceros(70) 
 
 
     def closeHand(self):
-        self.endeffector = agregar_ceros(0) 
+        self.endeffector = agregar_ceros(10) 
 
 
 def agregar_ceros(numero):
     es_positivo = (numero >= 0 and numero <=180)
     numero_str=str(abs(numero))
     if es_positivo:
-        numero_str="0"*(3-len(numero_str))+numero_str
+        numero_str="0"*(4-len(numero_str))+numero_str
     else:
         print("El numero no esta en el rango permitido.")
     return numero_str
