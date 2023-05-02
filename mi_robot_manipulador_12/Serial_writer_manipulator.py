@@ -35,7 +35,7 @@ class Serial_writer(Node):
         print("Corriendo en la raspberry. \n")
         self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
         self.mensaje=""
-             
+            
         self.joint1 = 90
         self.joint2 = 90
         self.joint3 = 90
