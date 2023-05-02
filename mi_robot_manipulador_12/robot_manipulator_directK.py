@@ -15,13 +15,13 @@ class Direct_Kinematics(Node):
         self.PF = [0.0, 0.0, 0.0]
         # Denavit-Hartenberg Parameters
         self.a_DH = np.array([0, 7.88, 14.25])
-        self.d_DH = np.array([7.0, 0, 9.26])
-        self.alpha_DH = np.array([0, 90, 0])
+        self.d_DH = np.array([7.0, 0, 0])
+        self.alpha_DH = np.array([90, 0, 0])
 
         # Articular information
         self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
         self.publisher = self.create_publisher(Float32MultiArray, 'endeffector_position', 10)
-        timer_period = 0.5 # Seconds
+        timer_period = 0.01 # Seconds
         self.timer = self.create_timer(timer_period, self.publisher_callback)
 
 
@@ -48,7 +48,7 @@ class Direct_Kinematics(Node):
         J1 = self.T01
         J2 = np.dot(J1,self.T12)
         J3 = np.dot(J2,self.T23)
-        self.PF = [J3[0,3], J3[1,3], J3[2,3]]
+        self.PF = [J2[0,3], J2[1,3], J2[2,3]]
         
         data = {"Junta": ['J1', 'J2', 'J3'],
         "Posición [X, Y. Z]": [J1[0:3,3], J2[0:3,3], J3[0:3,3]]}

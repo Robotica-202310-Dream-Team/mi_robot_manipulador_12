@@ -9,7 +9,7 @@ class Joystick_Publisher(Node):
     _axis_moved = False
     def __init__(self):
         super().__init__('robot_manipulator_joystick_teleop')
-        self.publisher_ = self.create_publisher(Float32MultiArray, 'manipulador_cmdVel', 10)
+        self.publisher_ = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         self.msg = Float32MultiArray()
         self.msg.data = [0.0, 0.0, 0.0, 0.0]
         self.open = 0

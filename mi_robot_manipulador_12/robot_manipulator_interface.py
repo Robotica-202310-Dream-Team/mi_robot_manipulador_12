@@ -39,9 +39,9 @@ class Robot_Manipulator_Interface(Node):
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
         ax.set_zlabel("Z")
-        ax.set_xlim(-10,10)
-        ax.set_ylim(-10,10)
-        ax.set_zlim(-10,10)
+        ax.set_xlim(-50,50)
+        ax.set_ylim(-50,50)
+        ax.set_zlim(-50,50)
         self.presionado = False
         global ventana
         ventana = Tk()
@@ -72,7 +72,7 @@ class Robot_Manipulator_Interface(Node):
             thread.start()
 
     def listener_callback(self, msg):
-        print("Llego el mensaje: "+ str(msg)+ "\n")
+        #print("Llego el mensaje: "+ str(msg)+ "\n")
         x = msg.data[0]
         y = msg.data[1]
         z = msg.data[2]
