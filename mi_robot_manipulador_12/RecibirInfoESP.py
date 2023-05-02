@@ -22,7 +22,7 @@ class recibir_info_esp(Node):
             print("Conexion Serial exitosa")     
         except Exception:
             pass
-        super().__init__('Recibir_Info_ESP')
+        super().__init__('RecibirInfoESP')
         self.respuestaESP = self.create_publisher(String,'respuestaESP',10)
         while rclpy.ok():
             self.ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
