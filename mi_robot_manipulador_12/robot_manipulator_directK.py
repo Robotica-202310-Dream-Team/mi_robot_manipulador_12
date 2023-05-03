@@ -15,8 +15,8 @@ class Direct_Kinematics(Node):
         self.PF = [0.0, 0.0, 0.0]
         # Denavit-Hartenberg Parameters
         self.a_DH = np.array([0, 7.88, 14.25])
-        self.d_DH = np.array([7.0, 0, 0])
-        self.alpha_DH = np.array([90, 0, 0])
+        self.d_DH = np.array([7.0, 0, 9.24])
+        self.alpha_DH = np.array([-90, 0, 0])
 
         # Articular information
         self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
