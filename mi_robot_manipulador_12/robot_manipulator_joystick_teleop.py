@@ -31,18 +31,18 @@ class Joystick_Publisher(Node):
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)
-            boton_end_effector = joystick_ref.get_button(0)
+            boton_abrir_end_effector = joystick_ref.get_button(10)
+            boton_cerrar_end_effector = joystick_ref.get_button(11)
             if boton_joint1:
                 self.msg.data[0] = angle
             elif boton_joint2:
                 self.msg.data[1] = angle 
             elif boton_joint3:
                 self.msg.data[2] = angle 
-            elif boton_end_effector:
-                if self.open == 0:
-                    self.open = 1
-                elif self.open == 1:
-                    self.open = 0
+            elif boton_abrir_end_effector:
+                self.open = 1
+            elif boton_cerrar_end_effector:
+                self.open = 0
             self.msg.data[3] = self.open
             self._axis_moved = False
             self.publisher_.publish(msg)
