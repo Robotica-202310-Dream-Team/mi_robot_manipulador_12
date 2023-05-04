@@ -23,11 +23,11 @@ class Joystick_Publisher(Node):
         joystick_ref.get_button(1)
         self.timer = self.create_timer(timer_period, lambda : self.timer_callback(msg=self.msg, joystick_ref=joystick_ref))
         
-    def timer_callback(self, msg,  joystick_ref):
+    def timer_callback(self, msg, joystick_ref):
         self.empty_event_queue()
         if self._axis_moved:
             axis3 = joystick_ref.get_axis(3)
-            angle = round (axis3*-90 +90)
+            angle = round (axis3*-75 +75)
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)
