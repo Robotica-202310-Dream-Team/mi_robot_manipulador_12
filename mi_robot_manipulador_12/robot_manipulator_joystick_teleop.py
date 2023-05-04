@@ -39,10 +39,9 @@ class Joystick_Publisher(Node):
             elif boton_joint3:
                 self.msg.data[2] = angle 
             elif boton_end_effector:
-                time.sleep(0.01)
                 if self.open == 0:
                     self.open = 1
-                else:
+                elif self.open == 1:
                     self.open = 0
             self.msg.data[3] = self.open
             self._axis_moved = False
@@ -62,8 +61,6 @@ class Joystick_Publisher(Node):
             elif event.type == pygame.JOYBUTTONDOWN:
                 pass
             elif event.type == pygame.JOYBUTTONUP:
-
-                
                 pass
 
 
