@@ -28,13 +28,13 @@ class Direct_Kinematics(Node):
     def homogeneous_matrix(self, a, d, alpha, theta):
         theta = np.deg2rad(theta)
         Perspective = np.array([0, 0, 0, 1])
-    	
-    	# Rotation and traslation matriz 
-        Matrix_H = np.array([[np.cos(theta), -np.cos(alpha)*np.sin(theta), np.sin(alpha)*np.sin(theta), a*np.cos(theta)],
-    	[np.sin(theta), np.cos(alpha)*np.cos(theta), -np.sin(alpha)*np.cos(theta), a*np.sin(theta)],
-    	[0, np.sin(alpha), np.cos(alpha), d],
-    	Perspective])
-    	
+
+        # Homogeneous matrix representation
+        Matrix_H = np.array([[np.cos(theta), -np.sin(theta)*np.cos(alpha), np.sin(theta)*np.sin(alpha), a*np.cos(theta)],
+        [np.sin(theta), np.cos(theta)*np.cos(alpha), -np.cos(theta)*np.sin(alpha), a*np.sin(theta)],
+        [0, np.sin(alpha), np.cos(alpha), d],
+        [0, 0, 0, 1]])  
+        
         return Matrix_H
 
     def listener_callback(self, msg): 

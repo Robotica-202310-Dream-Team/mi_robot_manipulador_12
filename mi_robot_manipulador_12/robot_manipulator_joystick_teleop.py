@@ -23,11 +23,11 @@ class Joystick_Publisher(Node):
         joystick_ref.get_button(1)
         self.timer = self.create_timer(timer_period, lambda : self.timer_callback(msg=self.msg, joystick_ref=joystick_ref))
         
-    def timer_callback(self, msg,  joystick_ref):
+    def timer_callback(self, msg, joystick_ref):
         self.empty_event_queue()
         if self._axis_moved:
             axis3 = joystick_ref.get_axis(3)
-            angle = round (axis3*-90 +90)
+            angle = round (axis3*-75 +75)
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)
@@ -39,10 +39,9 @@ class Joystick_Publisher(Node):
             elif boton_joint3:
                 self.msg.data[2] = angle 
             elif boton_end_effector:
-                time.sleep(0.01)
                 if self.open == 0:
                     self.open = 1
-                else:
+                elif self.open == 1:
                     self.open = 0
             self.msg.data[3] = self.open
             self._axis_moved = False
@@ -62,8 +61,6 @@ class Joystick_Publisher(Node):
             elif event.type == pygame.JOYBUTTONDOWN:
                 pass
             elif event.type == pygame.JOYBUTTONUP:
-
-                
                 pass
 
 

@@ -42,34 +42,12 @@ class Serial_writer(Node):
         self.joint3 = 90
         self.endeffector = 0
 
-        """self.board = pyfirmata.Arduino('/dev/ttyUSB0') # Identificar placa
-        # Configuracion inicila de pines a los que se conecta los servos
-
-        self.board.servo_config(3, angle = self.theta0) # Configure a pin as servo with first angle.
-        self.servo1 = self.board.get_pin('d:3:s') #digital pin, pin3, serial
-        self.servo1.write(self.theta0) #Move servo to initial position
-
-        self.board.servo_config(5, angle = self.theta1) # Configure a pin as servo with first angle.
-        self.servo2 = self.board.get_pin('d:5:s') #digital pin, pin3, serial
-        self.servo2.write(self.theta1) #Move servo to initial position
-
-        self.board.servo_config(6, angle = self.theta2)# Configure a pin as servo with first angle.
-        self.servo3 = self.board.get_pin('d:6:s') #digital pin, pin3, serial
-        self.servo3.write(self.theta2) #Move servo to initial position
-
-        # end-effector
-        self.board.servo_config(9, angle = self.theta3)# Configure a pin as servo with first angle.
-        self.servo0 = self.board.get_pin('d:9:s') #digital pin, pin3, serial 
-        self.servo0.write(self.theta3) #Move servo to initial position
-        """
-
     def listener_callback(self, msg):
         print("Llego mensaje: "+ str(msg)+ "\n")
         self.joint1 = agregar_ceros(int(msg.data[0]))
         self.joint2 = agregar_ceros(int(msg.data[1]))
         self.joint3 = agregar_ceros(int(msg.data[2]))
         self.endeffector = (int(msg.data[3]))
-        self.sleep = 0.015
         #self.goto(self.joint1,self.joint2,self.joint3,self.endeffector)#Mover los joints 1, 2, 3 y end effector
         if self.endeffector:
             self.openHand()
