@@ -14,9 +14,9 @@ class Direct_Kinematics(Node):
         super().__init__('robot_manipulator_directK')
         self.PF = [0.0, 0.0, 0.0]
         # Denavit-Hartenberg Parameters
-        self.a_DH = np.array([0, 0, 7.88, 14.25])
-        self.d_DH = np.array([0, 7.0, 0, 0])
-        self.alpha_DH = np.array([0, 90, 0, 0])
+        self.a_DH = np.array([0, 7.88, 14.25])
+        self.d_DH = np.array([7.0, 0, 0])
+        self.alpha_DH = np.array([90, 0, 0])
 
         # Articular information
         self.subscription = self.create_subscription(Float32MultiArray, 'manipulator_cmdVel', self.listener_callback, 10)
@@ -31,30 +31,30 @@ class Direct_Kinematics(Node):
 
     # Dynamic movement: Roll
     def rot_X(self, Theta):
-        
+       
         # Rotation in the X-axis 
         self.rotation_x = np.matrix([[1, 0, 0, 0],
-                                    [0, mt.cos(Theta), -(mt.sin(Theta)), 0],
-                                [0, mt.sinh(Theta), mt.cos(Theta), 0],
-                                [0, 0, 0, 1]])
+                               [0, mt.cos(Theta), -(mt.sin(Theta)), 0],
+                               [0, mt.sinh(Theta), mt.cos(Theta), 0],
+                               [0, 0, 0, 1]])
         
         return self.rotation_x
         
         
     # Dynamic movement: pitch
     def rot_Y(self, Theta):
-
+       
         # Rotation in the Y-axis 
         self.rotation_y = np.matrix([[mt.cos(Theta), 0, mt.sin(Theta), 0],
-                                [0, 1, 0, 0],
-                                [-(mt.sin(Theta)), 0, mt.cos(Theta), 0],
-                                [0, 0, 0, 1]])
+                               [0, 1, 0, 0],
+                               [-(mt.sin(Theta)), 0, mt.cos(Theta), 0],
+                               [0, 0, 0, 1]])
 
         return self.rotation_y
         
     # Dynamic movement: Yaw
     def rot_Z(self, Theta):
-
+       
         # Rotation in the Z-axis 
         self.rotation_z = np.matrix([[mt.cos(Theta), -(mt.sin(Theta)), 0, 0],
                                 [mt.sin(Theta), mt.cos(Theta), 0, 0],
@@ -77,7 +77,7 @@ class Direct_Kinematics(Node):
                                     [0, 0, 0, 1]])
         return self.trasl_Z
         
-# Traslation in X
+ # Traslation in X
     def tras_X(self, a):
         
         self.trasl_X = np. matrix([[1, 0, 0, a],
@@ -90,8 +90,8 @@ class Direct_Kinematics(Node):
 ## --------------------------------------------------------------------------
 ## ----------------------------PERSPECTIVE-----------------------------------
 ## --------------------------------------------------------------------------
-
-# Perspective in homogneous matrix
+   
+     # Perspective in homogneous matrix
     def set_perspective(self, pers_X, pers_Y, pers_Z):
         
         # Sets the perspective parameter of the homogeneous matrix
@@ -120,15 +120,15 @@ class Direct_Kinematics(Node):
         print(self.articular)
 
         self.HM_Base = np.identity(4)
-        self.HM_J1 = (self.rot_Z(mt.radians(self.articular[0]))) @ (self.tras_Z(self.d_DH[1])) @ (self.tras_X(self.a_DH[1])) @ (self.rot_X(mt.radians(self.alpha_DH[1])))
-        self.HM_J2 = (self.rot_Z(mt.radians(self.articular[1]))) @ (self.tras_Z(self.d_DH[2])) @ (self.tras_X(self.a_DH[2])) @ (self.rot_X(mt.radians(self.alpha_DH[2])))
-        self.HM_J3 = (self.rot_Z(mt.radians(self.articular[2]))) @ (self.tras_Z(self.d_DH[3])) @ (self.tras_X(self.a_DH[3])) @ (self.rot_X(mt.radians(self.alpha_DH[3])))
+        self.HM_J1 = (self.rot_Z(mt.radians(self.articular[1]))) @ (self.tras_Z(self.d_DH[1])) @ (self.tras_X(self.a_DH[1])) @ (self.rot_X(mt.radians(self.alpha_DH[1])))
+        self.HM_J2 = (self.rot_Z(mt.radians(self.articular[2]))) @ (self.tras_Z(self.d_DH[2])) @ (self.tras_X(self.a_DH[2])) @ (self.rot_X(mt.radians(self.alpha_DH[2])))
+        self.HM_J3 = (self.rot_Z(mt.radians(self.articular[3]))) @ (self.tras_Z(self.d_DH[3])) @ (self.tras_X(self.a_DH[3])) @ (self.rot_X(mt.radians(self.alpha_DH[3])))
 
         # Operational information
         self.J1 = self.HM_Base @ self.HM_J1
         self.J2 = self.J1 @ self.HM_J2
         self.J3 = self.J2 @ self.HM_J3
-        self.PF = [self.J1[0,3], self.J1[1,3], self.J1[2,3], self.J2[0,3], self.J2[1,3], self.J2[2,3], self.J3[0,3], self.J3[1,3], self.J3[2,3]]
+        self.PF = [self.J2[0,3], self.J2[1,3], self.J2[2,3]]
         
         data = {"Junta": ['J1', 'J2', 'J3'],
         "Posición [X, Y. Z]": [self.J1[0:3,3], self.J2[0:3,3], self.J3[0:3,3]]}
