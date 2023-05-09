@@ -24,9 +24,9 @@ class Robot_Manipulator_Planner(Node):
         x_goal = msg.x
         y_goal = msg.y
         z_goal = msg.z
-        print("X: " + x_goal + ", ")
-        print("Y: " + y_goal + ", ")
-        print("Z: " + z_goal + "\n")
+        print("X: " + str(x_goal) + ", ")
+        print("Y: " + str(y_goal) + ", ")
+        print("Z: " + str(z_goal) + "\n")
         vel = self.cineInversa(x_goal,y_goal,z_goal)
         msg = Float32MultiArray()
         msg.data = vel
@@ -35,22 +35,25 @@ class Robot_Manipulator_Planner(Node):
     def listener_callback_zone(self, msg):
         mensaje = msg.data
         if mensaje == "zone1":
+            print("Llego zona 1")
             x_goal = 1
             y_goal = 1
             z_goal = 16
         elif mensaje == "zone2":
+            print("Llego zona 2")
             x_goal = 2
             y_goal = 1
             z_goal = 16
         elif mensaje == "zone3":
+            print("Llego zona 3")
             x_goal = 3
             y_goal = 1
             z_goal = 16
         else:
             print("La zona especificada no es válida")
-        print("X: " + x_goal + ", ")
-        print("Y: " + y_goal + ", ")
-        print("Z: " + z_goal + "\n")
+        print("X: " + str(x_goal) + ", ")
+        print("Y: " + str(y_goal) + ", ")
+        print("Z: " + str(z_goal) + "\n")
         vel = self.cineInversa(x_goal,y_goal,z_goal)
         msg = Float32MultiArray()
         msg.data = vel
@@ -58,9 +61,9 @@ class Robot_Manipulator_Planner(Node):
 
 
     def cineInversa(self, x_goal, y_goal, z_goal):
-        vel1 = 0
-        vel2 = 0
-        vel3 = 0
+        vel1 = 0.0
+        vel2 = 0.0
+        vel3 = 0.0
         vel = [vel1,vel2,vel3]
         return vel
 
