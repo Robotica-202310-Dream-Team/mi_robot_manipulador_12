@@ -27,7 +27,7 @@ class Joystick_Publisher(Node):
         self.empty_event_queue()
         if self._axis_moved:
             axis3 = joystick_ref.get_axis(3)
-            angle = round (axis3*-75 +75)
+            angle = round (axis3*-90 +90)
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)

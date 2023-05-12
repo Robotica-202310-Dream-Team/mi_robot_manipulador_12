@@ -39,9 +39,9 @@ class Robot_Manipulator_Interface(Node):
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
         ax.set_zlabel("Z")
-        ax.set_xlim(-50,50)
-        ax.set_ylim(-50,50)
-        ax.set_zlim(-50,50)
+        ax.set_xlim(-30,30)
+        ax.set_ylim(-30,30)
+        ax.set_zlim(-30,30)
         self.presionado = False
         global ventana
         ventana = Tk()
@@ -72,24 +72,24 @@ class Robot_Manipulator_Interface(Node):
             thread.start()
 
     def listener_callback(self, msg):
-        #print("Llego el mensaje: "+ str(msg)+ "\n")
-        x = msg.data[0]
-        y = msg.data[1]
-        z = msg.data[2]
+        
+
+        
+        # End-Effector
+        x = msg.data[6]
+        y = msg.data[7]
+        z = msg.data[8]
         print(x)
         print(y)
         print(z)
-        ax.scatter3D(x,y,z)
+        # ax.plot3D(J1_X, J1_Y, J1_Z)
+        # ax.plot3D(J2_X, J2_Y, J2_Z)
+        # ax.plot3D(J3_X, J3_Y, J3_Z)
+        # ax.scatter3D(x,y,z)
         ventana.update()
         canvas.draw()  
 
-    
-        
-           
-
 # --------------------------------------------------------MAIN-----------------------------------------------------------
-
-
 
 def main(args=None):
     rclpy.init(args=args)
