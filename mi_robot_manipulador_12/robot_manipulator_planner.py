@@ -26,16 +26,16 @@ class Robot_Manipulator_Planner(Node):
         
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         timer_period = 0.01 # Seconds
-        self.timer = self.create_timer(timer_period, self.publisher_callback)
+        #self.timer = self.create_timer(timer_period, self.publisher_callback)
 
 
     def listener_callback_goal(self, msg):
         x_goal = msg.x
         y_goal = msg.y
         z_goal = msg.z
-        print("X: " + x_goal + ", ")
-        print("Y: " + y_goal + ", ")
-        print("Z: " + z_goal + "\n")
+        print("X: " + str(x_goal) + ", ")
+        print("Y: " + str(y_goal) + ", ")
+        print("Z: " + str(z_goal) + "\n")
 
         articular_state = self.invKinema(x_goal, y_goal, z_goal)
         msg = Float32MultiArray()
@@ -58,9 +58,9 @@ class Robot_Manipulator_Planner(Node):
             z_goal = 16
         else:
             print("La zona especificada no es válida")
-        print("X: " + x_goal + ", ")
-        print("Y: " + y_goal + ", ")
-        print("Z: " + z_goal + "\n")
+        print("X: " + str(x_goal) + ", ")
+        print("Y: " + str(y_goal) + ", ")
+        print("Z: " + str(z_goal) + "\n")
         articular_state = self.invKinema(x_goal,y_goal,z_goal)
         msg = Float32MultiArray()
         msg.data = articular_state
@@ -89,11 +89,11 @@ class Robot_Manipulator_Planner(Node):
         Theta = [Theta1, Theta2, Theta3]
         return Theta
     
-    def publisher_callback(self):
+    """def publisher_callback(self):
         msg = Float32MultiArray()
         msg.data = self.AJ
         self.publisher.publish(msg)
-
+"""
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 
 
