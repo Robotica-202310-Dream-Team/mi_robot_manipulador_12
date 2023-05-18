@@ -25,9 +25,6 @@ class Robot_Manipulator_Planner(Node):
         self.subscription_zone = self.create_subscription(String, 'robot_manipulator_zone', self.listener_callback_zone, 10)
         
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
-        timer_period = 0.01 # Seconds
-        #self.timer = self.create_timer(timer_period, self.publisher_callback)
-
 
     def listener_callback_goal(self, msg):
         x_goal = msg.x
@@ -68,25 +65,26 @@ class Robot_Manipulator_Planner(Node):
 
 
     def invKinema(self, x_goal, y_goal, z_goal):
-        # Theta 3
-        x3_1 = np.sqrt(1-((x_goal**2 + y_goal**2 + (z_goal - self.d_DH[1])**2 - self.a_DH[2]**2 - self.a_DH[3]**2)/(2*self.a_DH[2]*self.a_DH[3]))**2)
-        x3_2 = ((x_goal**2 + y_goal**2 + (z_goal - self.d_DH[1])**2 - self.a_DH[2]**2 - self.a_DH[3]**2)/(2*self.a_DH[2]*self.a_DH[3]))
-        Theta3 = np.arctan2(x3_1, x3_2)
-
-        # Theta 2
-        x2_11 = z_goal - self.d_DH[1]
-        x2_12 = np.sqrt(x_goal**2 + y_goal**2)
-
-        x2_21 = self.a_DH[3]*np.sin(Theta3)
-        x2_22 = self.a_DH[2] + self.a_DH[3]*np.cos(Theta3)
-        Theta2 = np.arctan2(x2_11, x2_12) - np.arctan2(x2_21, x2_22)
-
+    
         # Theta 1
         x1_1 = y_goal
-        x1_2 = z_goal
+        x1_2 = x_goal
         Theta1 = np.arctan2(x1_1, x1_2)
         
-        Theta = [Theta1, Theta2, Theta3]
+    	# Theta 3
+        self.c3 = (x_goal**2 + y_goal**2 + z_goal**2 - (self.d_DH[1]**2 + self.a_DH[2]**2 + self.a_DH[3]**2) - 2*self.d_DH[1]*(z_goal-self.d_DH[1]))/(2*self.a_DH[2]*self.a_DH[3])
+        
+        self.s3 = np.sqrt(1 - self.c3)
+        Theta3 = np.arctan2(self.s3, self.c3)
+        
+        # Theta 2
+        self.x2_11 = (z_goal-self.d_DH[1])*(np.cos(Theta1)-np.sin(Theta1))
+        self.x2_12 = (x_goal-y_goal)
+        self.x2_21 = (self.a_DH[3]*np.sin(Theta3))
+        self.x2_22 = (self.a_DH[3]*np.cos(Theta3)+self.a_DH[2])
+        Theta2 = np.arctan2(self.x2_11, self.x2_12) - np.arctan2(self.x2_21, self.x2_22)
+        
+        Theta = [np.rad2deg(Theta1), np.rad2deg(Theta2), np.rad2deg(Theta3), 90.0]
         return Theta
     
     """def publisher_callback(self):
