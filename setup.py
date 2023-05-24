@@ -28,6 +28,7 @@ setup(
             'Serial_writer_manipulator = mi_robot_manipulador_12.Serial_writer_manipulator:main',
             'robot_manipulator_joystick_teleop = mi_robot_manipulador_12.robot_manipulator_joystick_teleop:main',
             'RecibirInfoESP = mi_robot_manipulador_12.RecibirInfoESP:main',
+            'manipulation_test = mi_robot_navegacion.manipulation_test:main',
         ],  
     },
 )
