@@ -76,16 +76,14 @@ class Robot_Manipulator_Interface(Node):
 
         
         # End-Effector
-        x = msg.data[6]
-        y = msg.data[7]
-        z = msg.data[8]
+        x = msg.data[0]
+        y = msg.data[1]
+        z = msg.data[2]
         print(x)
         print(y)
         print(z)
-        # ax.plot3D(J1_X, J1_Y, J1_Z)
-        # ax.plot3D(J2_X, J2_Y, J2_Z)
-        # ax.plot3D(J3_X, J3_Y, J3_Z)
-        # ax.scatter3D(x,y,z)
+
+        ax.scatter3D(x,y,z)
         ventana.update()
         canvas.draw()  
 

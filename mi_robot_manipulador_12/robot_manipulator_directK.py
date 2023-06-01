@@ -121,17 +121,26 @@ class Direct_Kinematics(Node):
 
         self.HM_Base = np.identity(4)
         self.HM_J1 = (self.rot_Z(mt.radians(self.articular[0]))) @ (self.tras_Z(self.d_DH[1])) @ (self.tras_X(self.a_DH[1])) @ (self.rot_X(mt.radians(self.alpha_DH[1])))
-        self.HM_J2 = (self.rot_Z(mt.radians(self.articular[1]))) @ (self.tras_Z(self.d_DH[2])) @ (self.tras_X(self.a_DH[2])) @ (self.rot_X(mt.radians(self.alpha_DH[2])))
-        self.HM_J3 = (self.rot_Z(mt.radians(self.articular[2]))) @ (self.tras_Z(self.d_DH[3])) @ (self.tras_X(self.a_DH[3])) @ (self.rot_X(mt.radians(self.alpha_DH[3])))
+        self.HM_J2 = (self.rot_Z(mt.radians(self.articular[2]+35.0))) @ (self.tras_Z(self.d_DH[2])) @ (self.tras_X(self.a_DH[2])) @ (self.rot_X(mt.radians(self.alpha_DH[2])))
+        self.HM_J3 = (self.rot_Z(mt.radians(self.articular[1]+40.0))) @ (self.tras_Z(self.d_DH[3])) @ (self.tras_X(self.a_DH[3])) @ (self.rot_X(mt.radians(self.alpha_DH[3])))
 
         # Operational information
         self.J1 = self.HM_Base @ self.HM_J1
         self.J2 = self.J1 @ self.HM_J2
         self.J3 = self.J2 @ self.HM_J3
-        self.PF = [self.J1[0,3], self.J1[1,3], self.J1[2,3], self.J2[0,3], self.J2[1,3], self.J2[2,3], self.J3[0,3], self.J3[1,3], self.J3[2,3]]
+        
+        # geometric information
+        self.posX = np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] 
+        
+        self.posY = np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] 
+        
+        self.posZ = np.sin(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] + self.d_DH[1]
         
         data = {"Junta": ['J1', 'J2', 'J3'],
         "Posición [X, Y. Z]": [self.J1[0:3,3], self.J2[0:3,3], self.J3[0:3,3]]}
+        
+        
+        self.PF = [self.posX, self.posY, self.posZ]
 
     def publisher_callback(self):
         msg = Float32MultiArray()
