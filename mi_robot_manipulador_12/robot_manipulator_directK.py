@@ -130,11 +130,11 @@ class Direct_Kinematics(Node):
         self.J3 = self.J2 @ self.HM_J3
         
         # geometric information
-        self.posX = np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] 
+        self.posX = np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[1]+0.0+self.articular[2]+0.0))*self.a_DH[3] + np.cos(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[1]+0.0))*self.a_DH[2] 
         
-        self.posY = np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] 
+        self.posY = np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[1]+0.0+self.articular[2]+0.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[0]))*np.cos(np.deg2rad(self.articular[1]+0.0))*self.a_DH[2] 
         
-        self.posZ = np.sin(np.deg2rad(self.articular[2]+35.0+self.articular[1]+40.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[2]+35.0))*self.a_DH[2] + self.d_DH[1]
+        self.posZ = np.sin(np.deg2rad(self.articular[1]+0.0+self.articular[2]+0.0))*self.a_DH[3] + np.sin(np.deg2rad(self.articular[1]+0.0))*self.a_DH[2] + self.d_DH[1]
         
         data = {"Junta": ['J1', 'J2', 'J3'],
         "Posición [X, Y. Z]": [self.J1[0:3,3], self.J2[0:3,3], self.J3[0:3,3]]}

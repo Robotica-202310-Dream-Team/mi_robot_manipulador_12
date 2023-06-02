@@ -79,9 +79,9 @@ class Robot_Manipulator_Interface(Node):
         x = msg.data[0]
         y = msg.data[1]
         z = msg.data[2]
-        print(x)
-        print(y)
-        print(z)
+        print('La coordenada en X es: ' +str(x))
+        print('La coordenada en Y es: ' +str(y))
+        print('La coordenada en Z es: ' +str(z))
 
         ax.scatter3D(x,y,z)
         ventana.update()

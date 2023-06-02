@@ -70,12 +70,16 @@ class Robot_Manipulator_Planner(Node):
         x1_1 = y_goal
         x1_2 = x_goal
         Theta1 = np.arctan2(x1_1, x1_2)
+        if Theta1 < 0:
+        	Theta1 += np.pi
         
     	# Theta 3
         self.c3 = (x_goal**2 + y_goal**2 + z_goal**2 - (self.d_DH[1]**2 + self.a_DH[2]**2 + self.a_DH[3]**2) - 2*self.d_DH[1]*(z_goal-self.d_DH[1]))/(2*self.a_DH[2]*self.a_DH[3])
         
         self.s3 = np.sqrt(1 - self.c3)
         Theta3 = np.arctan2(self.s3, self.c3)
+        if Theta3 < 0:
+        	Theta3 += np.pi
         
         # Theta 2
         self.x2_11 = (z_goal-self.d_DH[1])*(np.cos(Theta1)-np.sin(Theta1))
@@ -83,15 +87,12 @@ class Robot_Manipulator_Planner(Node):
         self.x2_21 = (self.a_DH[3]*np.sin(Theta3))
         self.x2_22 = (self.a_DH[3]*np.cos(Theta3)+self.a_DH[2])
         Theta2 = np.arctan2(self.x2_11, self.x2_12) - np.arctan2(self.x2_21, self.x2_22)
+        if Theta2 < 0:
+        	Theta2 += np.pi
         
         Theta = [np.rad2deg(Theta1), np.rad2deg(Theta2), np.rad2deg(Theta3), 90.0]
         return Theta
     
-    """def publisher_callback(self):
-        msg = Float32MultiArray()
-        msg.data = self.AJ
-        self.publisher.publish(msg)
-"""
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 
 
