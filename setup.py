@@ -29,6 +29,7 @@ setup(
             'robot_manipulator_joystick_teleop = mi_robot_manipulador_12.robot_manipulator_joystick_teleop:main',
             'RecibirInfoESP = mi_robot_manipulador_12.RecibirInfoESP:main',
             'manipulation_test = mi_robot_manipulador_12.manipulation_test:main',
+            'robot_manipulator_control = mi_robot_manipulador_12.robot_manipulator_control:main',
         ],  
     },
 )
