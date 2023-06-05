@@ -13,9 +13,10 @@ class Direct_Kinematics(Node):
     def __init__(self):
         super().__init__('robot_manipulator_directK')
         self.PF = [0.0, 0.0, 0.0]
+        
         # Denavit-Hartenberg Parameters
-        self.a_DH = np.array([0, 0, 7.88, 14.25])
-        self.d_DH = np.array([0, 7.0, 0, 0])
+        self.a_DH = np.array([0, 0, 10.0, 23.0])
+        self.d_DH = np.array([0, 9.0, 0, 0])
         self.alpha_DH = np.array([0, 90, 0, 0])
 
         # Articular information

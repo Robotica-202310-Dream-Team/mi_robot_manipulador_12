@@ -16,8 +16,8 @@ class Robot_Manipulator_Planner(Node):
         super().__init__('robot_manipulator_planner')
 
         # Denavit-Hartenberg Parameters
-        self.a_DH = np.array([0, 0, 7.88, 14.25])
-        self.d_DH = np.array([0, 7.0, 0, 0])
+        self.a_DH = np.array([0, 0, 10.0, 23.0])
+        self.d_DH = np.array([0, 9.0, 0, 0])
         self.alpha_DH = np.array([0, 90, 0, 0])
 
         print("Inicio del nodo que sirve para llevar el end-effector del robot a una posición destino deseada.")
@@ -73,7 +73,7 @@ class Robot_Manipulator_Planner(Node):
         if Theta1 < 0:
         	Theta1 += np.pi
         
-    	# Theta 3
+        # Theta 3
         self.c3 = (x_goal**2 + y_goal**2 + z_goal**2 - (self.d_DH[1]**2 + self.a_DH[2]**2 + self.a_DH[3]**2) - 2*self.d_DH[1]*(z_goal-self.d_DH[1]))/(2*self.a_DH[2]*self.a_DH[3])
         
         self.s3 = np.sqrt(1 - self.c3)

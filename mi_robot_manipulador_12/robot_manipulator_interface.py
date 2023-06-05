@@ -7,6 +7,8 @@ from rclpy.node import Node
 from pynput import keyboard
 from std_msgs.msg import Float32MultiArray
 
+from tkinter import filedialog
+
 from mpl_toolkits import mplot3d
 import numpy as np
 import matplotlib.pyplot as plt
@@ -33,7 +35,7 @@ class Robot_Manipulator_Interface(Node):
         self.subscription = self.create_subscription(Float32MultiArray, 'endeffector_position', self.listener_callback, 10)
 
 
-        fig = plt.figure(figsize=(7.3,6))
+        self.fig = plt.figure(figsize=(7.3,6))
         global ax
         ax = plt.axes(projection="3d")
         ax.set_xlabel("X")
@@ -49,14 +51,18 @@ class Robot_Manipulator_Interface(Node):
         ventana.wm_title('Grafica para visualizar la posición del End-Effector')
         #ventana.minsize(width=1025,height=1125)
 
-        frame = Frame(ventana,  bg='gray22',bd=3)
-        frame.grid(column=0,row=0)
+        self.frame = Frame(ventana,  bg='gray22',bd=3)
+        self.frame.grid(column=0,row=0)
 
         global canvas
-        canvas = FigureCanvasTkAgg(fig, master = frame)  # Crea el area de dibujo en Tkinter
+    
+        canvas = FigureCanvasTkAgg(self.fig, master = self.frame)  # Crea el area de dibujo en Tkinter
         canvas.get_tk_widget().grid(column=0, row=0, columnspan=3, padx=5, pady =5)
-        tk.Button(frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
-
+        self.nick = tk.StringVar()
+        tk.Button(self.frame, text='Iniciar', width = 15, bg='magenta',fg='white', command= self.inicio).grid(column=0, row=1, pady =5)
+        tk.Button(self.frame, text = "Screenshoot",font="helvetica 10", command=self.boton2).grid(column=1, row=1, pady =5)
+        #tk.Label(self.frame,background="#c35bcf",  text="File name:",font="helvetica 10").grid(column=2, row=1, pady =5)
+        self.insert_nick = tk.Entry(self.frame, background="#a5e1f2", width=20,  textvariable=self.nick).grid(column=2, row=1, pady =5)
         style = ttk.Style()
         style.configure("Horizontal.TScale", background= 'gray22')  
         ventana.mainloop()
@@ -87,6 +93,16 @@ class Robot_Manipulator_Interface(Node):
         ventana.update()
         canvas.draw()  
 
+    def boton2 (self):
+        print ("Boton2")
+        scriptDir = filedialog.asksaveasfilename()
+
+        name =self.nick.get()
+
+        ruta = scriptDir +name
+        print (ruta)
+        self.fig.savefig(ruta )
+        pass
 # --------------------------------------------------------MAIN-----------------------------------------------------------
 
 def main(args=None):

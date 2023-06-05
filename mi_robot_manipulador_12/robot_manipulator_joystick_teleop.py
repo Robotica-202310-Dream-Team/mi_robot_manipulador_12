@@ -11,7 +11,7 @@ class Joystick_Publisher(Node):
         super().__init__('robot_manipulator_joystick_teleop')
         self.publisher_ = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         self.msg = Float32MultiArray()
-        self.msg.data = [0.0, 0.0, 0.0, 0.0]
+        self.msg.data = [270.0, 0.0, 245.0, 0.0]
         self.open = 0
         timer_period = 0.01  # seconds
         pygame.init()
@@ -27,18 +27,24 @@ class Joystick_Publisher(Node):
         self.empty_event_queue()
         if self._axis_moved:
             axis3 = joystick_ref.get_axis(3)
-            angle = round (axis3*-90 +90)
+            angle1 = round ((axis3)*-90 +360 )
+            if angle1 > 360:
+                angle1 -= 360
+            angle2 = round (axis3*-65 +65)
+            angle3 = round ((axis3)*-90 +335 )
+            if angle3 > 360:
+                angle3 -= 360
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)
             boton_abrir_end_effector = joystick_ref.get_button(0)
             boton_cerrar_end_effector = joystick_ref.get_button(1)
             if boton_joint1:
-                self.msg.data[0] = angle
+                self.msg.data[0] = angle1
             elif boton_joint2:
-                self.msg.data[1] = angle 
+                self.msg.data[1] = angle2 
             elif boton_joint3:
-                self.msg.data[2] = angle 
+                self.msg.data[2] = angle3 
             elif boton_abrir_end_effector:
                 self.open = 1
             elif boton_cerrar_end_effector:
