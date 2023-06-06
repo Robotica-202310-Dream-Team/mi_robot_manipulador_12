@@ -7,12 +7,15 @@ from time import sleep
 from rclpy.node import Node
 from rclpy.duration import Duration
 from nav_msgs.msg import Odometry
-from std_msgs.msg import String, Float32MultiArray, Bool
+from std_msgs.msg import String, Float32MultiArray, Float64MultiArray, Bool
 
 class Robot_Manipulator_Control(Node):
 
     def __init__(self):
         # Flags
+        self.navPickUP = False
+
+        self.instance = 0
         self.FlagPosZone1_Up = False
         self.FlagPos1  = False
         self.FlagPick= False
@@ -24,6 +27,8 @@ class Robot_Manipulator_Control(Node):
         self.pos_x = 0.0
         self.pos_y = 0.0
         self.pos_Theta = 0.0
+        self.msgPose = Float64MultiArray()
+        self.msgThetas = Float64MultiArray()
 
         super().__init__('robot_manipulator_control')
         qos_policy = rclpy.qos.QoSProfile(reliability=rclpy.qos.ReliabilityPolicy.BEST_EFFORT,
@@ -32,32 +37,27 @@ class Robot_Manipulator_Control(Node):
         
         # Articular information
         self.subscription = self.create_subscription(Odometry, 'camera/pose/sample' ,self.subscriber_callback_pos_actual, qos_profile=qos_policy)
-        self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
+        self.publisher_vel = self.create_publisher(Float64MultiArray, 'manipulator_cmdVel', 10)
+        self.publisher_pose = self.create_publisher(Float64MultiArray, 'posicion_final', 10)
 
     # Map zones
-    def zone11_goal(self):
+    def zone1_goal(self):
         # Align with base 1
-        self.pos_x = 0.0
-        self.pos_y = 0.0
-        self.pos_Theta = 90.0
+        self.pos_x11 = 23.0
+        self.pos_y11 = 9.0
+        self.pos_Theta11 = 90.0
 
-    def zone12_goal(self):
         # Go back 
-        self.pos_x = 0.0
-        self.pos_y = 0.0
-        self.pos_Theta = 90.0
+        self.pos_x12 = 23.0
+        self.pos_y12 = -3.0
+        self.pos_Theta12 = 90.0
 
-    def zone21_goal(self):
         # Align with base 2
-        self.pos_x = 0.0
-        self.pos_y = 0.0
-        self.pos_Theta = -90.0
+        self.pos_x21 = 53.0
+        self.pos_y21 = -15.0
+        self.pos_Theta21 = 0.0
 
-    def zone22_goal(self):
-        # Go back 
-        self.pos_x = 0.0
-        self.pos_y = 0.0
-        self.pos_Theta = -90.0
+        self.multiPoint = [self.pos_x11, self.pos_y11, self.pos_Theta11, self.pos_x12, self.pos_y12, self.pos_Theta12, self.pos_x21, self.pos_x21, self.pos_Theta21]
 
     # Pick-Up trajectories
     def home_traj(self):
@@ -67,7 +67,7 @@ class Robot_Manipulator_Control(Node):
         self.Theta4 = 10.0
         self.ThetaS = [self.Theta1, self.Theta2, self.Theta3, self.Theta4]
 
-    def Pos1_traj(self, intsance):
+    def Pos1_traj(self):
         self.Theta1 = 0.0
         self.Theta2 = 72.0
         self.Theta3 = 270.0
@@ -103,35 +103,40 @@ class Robot_Manipulator_Control(Node):
         print("y_actual: "+ str(self.actual_pos_y)+"\n") 
         print("ThetaZ_actual: "+ str(self.actualGrado)+"\n")
 
+        if self.navPickUP == False:
+            # Multipoint trajectory initialize
+            self.zone1_goal()
+            self.msgPose.data = self.multiPoint
+            print(self.msgPose.data)
+
         # Pick up
-        self.instance = 0
-        self.FlagPosZone1_Up = True
+        self.FlagPosZone1_Up = False
 
         if self.FlagPosZone1_Up== True and self.instance == 0:
             self.home_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3)
             self.FlagPos1 = True
 
         if self.FlagPos1 == True:
             self.Pos1_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3)
             self.FlagPick = True
 
         if self.FlagPick == True:
             self.Up_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3)
             self.FlagUp = True
 
         if self.FlagUp == True:
             self.Up_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3)
             self.instance = 1
             self.FlagPosZone1_Down = True
@@ -144,22 +149,22 @@ class Robot_Manipulator_Control(Node):
         if self.FlagPosZone1_Down == True:
             time.sleep(5)
             self.Pick_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3)
             self.FlagPlace = True
 
         if self.FlagPlace == True:
             self.Pos1_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3) 
             self.GoHome = True
 
         if self.GoHome == True:
             self.home_traj()
-            self.msg1.data = self.ThetaS
-            self.publisher_vel.publish(self.msg1)
+            self.msgThetas.data = self.ThetaS
+            self.publisher_vel.publish(self.msgThetas)
             time.sleep(3) 
             self.FlagPosZone1_Down = False
             self.FlagPlace = False

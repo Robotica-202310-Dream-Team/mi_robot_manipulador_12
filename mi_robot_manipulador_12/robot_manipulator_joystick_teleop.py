@@ -11,7 +11,7 @@ class Joystick_Publisher(Node):
         super().__init__('robot_manipulator_joystick_teleop')
         self.publisher_ = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         self.msg = Float32MultiArray()
-        self.msg.data = [270.0, 0.0, 245.0, 0.0]
+        self.msg.data = [0.0, 120.0, 245.0, 0.0]
         self.open = 0
         timer_period = 0.01  # seconds
         pygame.init()
@@ -37,6 +37,8 @@ class Joystick_Publisher(Node):
             boton_joint1 = joystick_ref.get_button(4)
             boton_joint2 = joystick_ref.get_button(2)
             boton_joint3 = joystick_ref.get_button(3)
+            boton_recoger = joystick_ref.get_button(10)
+            boton_soltar = joystick_ref.get_button(11)
             boton_abrir_end_effector = joystick_ref.get_button(0)
             boton_cerrar_end_effector = joystick_ref.get_button(1)
             if boton_joint1:
@@ -45,16 +47,113 @@ class Joystick_Publisher(Node):
                 self.msg.data[1] = angle2 
             elif boton_joint3:
                 self.msg.data[2] = angle3 
+            ####################################    
             elif boton_abrir_end_effector:
-                self.open = 1
+                self.msg.data[3] = 1
             elif boton_cerrar_end_effector:
-                self.open = 0
-            self.msg.data[3] = self.open
+                self.msg.data[3] = 0
+            ###################################     
+            elif boton_recoger:
+                self.recoger(msg)
+            elif boton_soltar:
+                self.soltar(msg)
+            
             self._axis_moved = False
             self.publisher_.publish(msg)
         print (f"Mensaje: {self.msg.data}")
 
-        
+    def recoger(self,msg):
+        print("Recogiendo")
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 245
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ###########################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 275
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ##########################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 76
+        self.msg.data[2] = 275
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 76
+        self.msg.data[2] = 275
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 275
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 245
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        print("Ya recogió")
+
+    def soltar(self,msg):
+        print("Soltando")
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 245
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ###########################
+        self.msg.data[0] = 0
+    
+        self.msg.data[1] = 120
+        self.msg.data[2] = 275
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ##########################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 76
+        self.msg.data[2] = 275
+        self.msg.data[3] = 0
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 76
+        self.msg.data[2] = 275
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 275
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        self.msg.data[0] = 0
+        self.msg.data[1] = 120
+        self.msg.data[2] = 245
+        self.msg.data[3] = 1
+        self.publisher_.publish(msg)
+        time.sleep(0.5)
+        ######################
+        print("Ya soltó")
 
     def empty_event_queue(self):
         for event in pygame.event.get():
