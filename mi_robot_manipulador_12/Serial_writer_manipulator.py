@@ -72,7 +72,7 @@ class serial_Writer(Node):
         self.left = agregar_ceros_nav(int(msg.data[0]))
         self.right = agregar_ceros_nav(int(msg.data[1]))
         #print (f"left{left}")
-        self.serialWriteAll()
+        self.serialWriteAll(1)
 
     def listener_callback_manipulator(self, msg):
         #print("Llego mensaje: "+ str(msg)+ "\n")
@@ -86,7 +86,7 @@ class serial_Writer(Node):
         else:
             self.closeHand()
 
-        self.serialWriteAll()
+        self.serialWriteAll(2)
         
 
     def openHand(self):
@@ -96,7 +96,17 @@ class serial_Writer(Node):
     def closeHand(self):
         self.endeffector = agregar_ceros_man(10)
 
-    def serialWriteAll(self):
+    def serialWriteAll(self, mode):
+        if(mode == 1):
+            self.joint1 =agregar_ceros_man(0)
+            self.joint2 =agregar_ceros_man(120)
+            self.joint3 =agregar_ceros_man(245)
+            self.closeHand()
+        elif(mode == 2):
+            self.left = agregar_ceros_nav(0)
+            self.right = agregar_ceros_nav(0)
+
+
         self.mensaje = str([self.left,self.right,self.joint1,self.joint2,self.joint3,self.endeffector]) + "\n"
         print(self.mensaje)
         self.ser.write(self.mensaje.encode('utf-8'))
@@ -115,7 +125,7 @@ def agregar_ceros_nav(numero):
     return numero_str
 
 def agregar_ceros_man(numero):
-    es_positivo = (numero >= 0 and numero <=180)
+    es_positivo = (numero >= 0 and numero <=360)
     numero_str=str(abs(numero))
     if es_positivo:
         numero_str="0"*(4-len(numero_str))+numero_str
