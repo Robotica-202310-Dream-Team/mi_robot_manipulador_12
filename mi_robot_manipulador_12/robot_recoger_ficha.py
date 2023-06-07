@@ -10,14 +10,14 @@ from rclpy.duration import Duration
 from std_msgs.msg import String, Float32MultiArray, Bool
 
 
-class Robot_Manipulator_Planner(Node):
+class Robot_Recoger_Ficha(Node):
 
     # -----------------------------------------------------INIT--------------------------------------------------------------
     def __init__(self):
     	self.msg1 = Bool()
     	self.msg2 = Bool()
     	self.msg = Float32MultiArray()
-        super().__init__('robot_manipulator_planner')
+        super().__init__('robot_recoger_ficha')
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
         self.subscription_flag_recoger = self.create_subscription(Bool, 'pick_up', self.listener_callback_flag_pick_up, 10)
         self.subscription_flag_dejar = self.create_subscription(Bool, 'release', self.listener_callback_flag_place, 10)
@@ -160,12 +160,12 @@ class Robot_Manipulator_Planner(Node):
         self.msg.data[3] = 0.0
         self.publisher_.publish(msg)
         time.sleep(1)
-        print("Se solto ficha")
+        print("Se solto	 ficha")
     
 def main(args=None):
     rclpy.init(args=args)
-    robot_manipulator_planner = Robot_Manipulator_Planner()
-    rclpy.spin(robot_manipulator_planner)
+    robot_manipulator_planner = Robot_Recoger_Ficha()
+    rclpy.spin(robot_recoger_ficha)
     Robot_Manipulator_Planner.destroy_node()
     rclpy.shutdown()
     
