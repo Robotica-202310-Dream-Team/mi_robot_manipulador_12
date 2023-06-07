@@ -14,142 +14,153 @@ class Robot_Manipulator_Planner(Node):
 
     # -----------------------------------------------------INIT--------------------------------------------------------------
     def __init__(self):
+    	self.msg1 = Bool()
+    	self.msg2 = Bool()
+    	self.msg = Float32MultiArray()
         super().__init__('robot_manipulator_planner')
-        print("Inicio del nodo que sirve para recoger la ficha .")
-        self.P1 = 0
-        self.P2 = 0
-        self.flagTake = False
-        self.flagPlace = False
-        self.subscription_flag_recoger = self.create_subscription(Bool, 'flag_recoger', self.listener_callback_flag_take, 10)
-        self.subscription_flag_dejar = self.create_subscription(Bool, 'flag_dejar', self.listener_callback_flag_place, 10)
         self.publisher = self.create_publisher(Float32MultiArray, 'manipulator_cmdVel', 10)
-        self.publisher_retro_recoger = self.create_publisher(Bool, 'flag_recoger_retro', 10)
-        self.publisher_retro_dejar = self.create_publisher(Bool, 'flag_dejar_retro', 10)
+        self.subscription_flag_recoger = self.create_subscription(Bool, 'pick_up', self.listener_callback_flag_pick_up, 10)
+        self.subscription_flag_dejar = self.create_subscription(Bool, 'release', self.listener_callback_flag_place, 10)
     
-    def listener_callback_flag_take(self, msg):
-        msg1 = Bool()
-        msg1.data = False
-        self.flagTake = msg.data
-        if self.flagTake == False:
-            self.P1 = 0
-        if self.P1 == 1:
-            msg1.data = True
-            self.publisher_retro_recoger.publish(msg1)
-        if self.flagTake == True and self.P1 == 0:
-            self.P1 += 1
-            self.pickUp()
-        else:
-            self.publisher_retro_recoger.publish(msg1)
-
+    def listener_callback_flag_pick_up(self, msg):
+        msg1.data = msg.data
+	if msg1.data == True:
+		self.Pick_Up()
+	else:
+		pass
+		
     def listener_callback_flag_place(self, msg):
-        msg1 = Bool()
-        msg1.data = False
-        self.flagPlace = msg.data
-        if self.flagPlace == False:
-            self.P2 = 0
-        if self.P2 == 1:
-            msg1.data = True
-            self.publisher_retro_dejar.publish(msg1)
-        if self.flagPlace == True and self.P2 == 0:
-            self.P2 += 1
-            self.place()
-        else:
-            self.publisher_retro_dejar.publish(msg1)
+        msg2.data = msg.data
+	if msg1.data == True:
+		self.Place()
+	else:
+		pass
 
-    def pickUp(self, msg):
-        print("Recogiendo")
+   def Pick_Up(self):
+   	# Home
+   	msg = Float32MultiArray()
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 0.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # P1
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 111.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 0.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # P2
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 102.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 0.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # P3
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 93.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 0.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # Cerrar
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 93.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 1.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # P2
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 102.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 1.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # P1
+   	self.msg.data[0] = 0.0
+        self.msg.data[1] = 111.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 1.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        
+        # Home
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 1.0
+        self.publisher_.publish(msg)
+        time.sleep(1)
+        print("Se recogio ficha")
+   
+    def Place(self, msg):
+        # Home
         msg = Float32MultiArray()
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 245
-        self.msg.data[3] = 1
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 1.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ###########################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 275
-        self.msg.data[3] = 1
+        time.sleep(1)
+        
+        # P1
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 275.0
+        self.msg.data[3] = 1.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ##########################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 76
-        self.msg.data[2] = 275
-        self.msg.data[3] = 1
+        time.sleep(1)
+        
+        # P2
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 76.0
+        self.msg.data[2] = 275.0
+        self.msg.data[3] = 1.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 76
-        self.msg.data[2] = 275
-        self.msg.data[3] = 0
+        time.sleep(1)
+        
+        # Abrir
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 76.0
+        self.msg.data[2] = 275.0
+        self.msg.data[3] = 0.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 275
-        self.msg.data[3] = 0
+        time.sleep(1)
+        
+        # P2
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 76.0
+        self.msg.data[2] = 275.0
+        self.msg.data[3] = 0.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 245
-        self.msg.data[3] = 0
+        time.sleep(1)
+        
+        # P1
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 275.0
+        self.msg.data[3] = 0.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        print("Ya recogió")
-
-    def place(self,msg):
-        print("Soltando")
-        msg = Float32MultiArray()
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 245
-        self.msg.data[3] = 0
+        time.sleep(1)
+        
+        # Home
+        self.msg.data[0] = 0.0
+        self.msg.data[1] = 120.0
+        self.msg.data[2] = 245.0
+        self.msg.data[3] = 0.0
         self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ###########################
-        self.msg.data[0] = 0
-    
-        self.msg.data[1] = 120
-        self.msg.data[2] = 275
-        self.msg.data[3] = 0
-        self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ##########################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 76
-        self.msg.data[2] = 275
-        self.msg.data[3] = 0
-        self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 76
-        self.msg.data[2] = 275
-        self.msg.data[3] = 1
-        self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 275
-        self.msg.data[3] = 1
-        self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        self.msg.data[0] = 0
-        self.msg.data[1] = 120
-        self.msg.data[2] = 245
-        self.msg.data[3] = 1
-        self.publisher_.publish(msg)
-        time.sleep(0.5)
-        ######################
-        print("Ya soltó")
+        time.sleep(1)
+        print("Se solto ficha")
     
 def main(args=None):
     rclpy.init(args=args)
